@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_instagram_clone/Resources/auth.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../Utils/colors.dart';
@@ -109,9 +110,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
               height: 24,
             ),
             GestureDetector(
-              onTap: (() {}),
+              onTap: (() async {
+                String res = await AuthMethods().signUpUser(
+                    email: _emailController.text,
+                    password: _passwordController.text,
+                    username: _usernameController.text,
+                    bio: _bioController.text);
+                print(res);
+              }),
               child: Container(
-                child: const Text('Log in'),
+                child: const Text('Sign Up'),
                 width: double.infinity,
                 alignment: Alignment.center,
                 padding: const EdgeInsets.symmetric(vertical: 12),
