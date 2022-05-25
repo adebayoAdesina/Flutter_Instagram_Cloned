@@ -1,6 +1,10 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_instagram_clone/Resources/auth.dart';
+import 'package:flutter_instagram_clone/Utils/utils.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../Utils/colors.dart';
 import '../Widgets/text_field_inputs.dart';
@@ -17,6 +21,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _bioController = TextEditingController();
   final TextEditingController _usernameController = TextEditingController();
+  Uint8List? _image;
 
   @override
   void dispose() {
@@ -24,7 +29,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
     _emailController.dispose();
     _passwordController.dispose();
     _bioController.dispose();
-    _usernameController.dispose();
+    _usernameController.dispose(); 
+  }
+
+  void selectImage() async {
+    
+    Uint8List im = await pickImage(ImageSource.gallery);
+    setState(() {
+      _image = im;
+    });
   }
 
   @override
@@ -50,6 +63,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
             Stack(
               clipBehavior: Clip.none,
               children: [
+                _image!=null ?
+                CircleAvatar(
+                  radius: 30,
+                  backgroundColor: primaryColor,
+                  backgroundImage: MemoryImage(_image!),
+                ):
                 const CircleAvatar(
                   radius: 30,
                   backgroundColor: primaryColor,
@@ -65,7 +84,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         borderRadius: BorderRadius.circular(30)),
                     child: IconButton(
                         padding: const EdgeInsets.all(0.1),
-                        onPressed: (() {}),
+                        onPressed: selectImage,
                         icon: const Icon(
                           Icons.add_a_photo,
                           size: 16,
@@ -115,7 +134,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     email: _emailController.text,
                     password: _passwordController.text,
                     username: _usernameController.text,
-                    bio: _bioController.text);
+                    bio: _bioController.text,
+                    file: _image!
+                    );
                 print(res);
               }),
               child: Container(
