@@ -1,8 +1,16 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_instagram_clone/Resources/auth.dart';
 import 'package:flutter_instagram_clone/Utils/colors.dart';
+import 'package:flutter_instagram_clone/Utils/utils.dart';
 import 'package:flutter_instagram_clone/Views/signup_screen.dart';
 import 'package:flutter_instagram_clone/Widgets/text_field_inputs.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+
+import '../Responsiveness/responsive.dart';
+import '../Screens/mobileScreenLayout.dart';
+import '../Screens/webScreenLayout.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -14,12 +22,36 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  bool _isloading = false;
 
   @override
   void dispose() {
     super.dispose();
     _emailController.dispose();
     _passwordController.dispose();
+  }
+
+  void logInUser() async {
+    String res = await AuthMethods().loginUser(
+        email: _emailController.text, password: _passwordController.text);
+    setState(() {
+      _isloading = true;
+    });
+    if (res == 'success') {
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (_) => const ResponsiveLayout(
+                  webScreenLayout: WebScreenLayout(),
+                  mobileScreenLayout: MobileScreenLayout())));
+    } else {
+      await showSnapBar(res, context);
+    }
+    Timer(const Duration(seconds: 2), () {
+      setState(() {
+        _isloading = false;
+      });
+    });
   }
 
   @override
@@ -58,9 +90,15 @@ class _LoginScreenState extends State<LoginScreen> {
               height: 24,
             ),
             GestureDetector(
-              onTap: (() {}),
+              onTap: logInUser,
               child: Container(
-                child: const Text('Log in'),
+                child: _isloading
+                    ? const Center(
+                        child: CircularProgressIndicator(
+                          color: primaryColor,
+                        ),
+                      )
+                    : const Text('Log in'),
                 width: double.infinity,
                 alignment: Alignment.center,
                 padding: const EdgeInsets.symmetric(vertical: 12),
