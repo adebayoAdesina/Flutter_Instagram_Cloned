@@ -10,6 +10,14 @@ class AuthMethods {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _store = FirebaseFirestore.instance;
 
+  Future<model.User> getUserDetails() async {
+    User currentUser = _auth.currentUser!;
+
+    DocumentSnapshot snap = await _store.collection('users').doc(currentUser.uid).get();
+
+    return model.User.fromSnap(snap);
+  }
+
   //sign up user
   Future<String> signUpUser({
     required String email,
@@ -32,35 +40,35 @@ class AuthMethods {
         // to get the user id
         print(credential.user!.uid);
 
-        // String photoUrl = await StorageMethod()
-        //     .uploadImageToStorage('profilePic', file, false);
+        String photoUrl = await StorageMethod()
+            .uploadImageToStorage('profilePic', file, false);
 
-        // model.User user = model.User(
-        //   username: username,
-        //   uid: credential.user!.uid,
-        //   bio: bio,
-        //   email: email,
-        //   photoUrl: photoUrl,
-        //   followers: [],
-        //   following: [],
-        // );
+        model.User user = model.User(
+          username: username,
+          uid: credential.user!.uid,
+          bio: bio,
+          email: email,
+          photoUrl: photoUrl,
+          followers: [],
+          following: [],
+        );
  
         //add user to our database
-        await _store.collection('users').doc(credential.user!.uid).set({
-          'username': username,
-          'uid': credential.user!.uid,
-          'bio': bio,
-          'email': email,
-          'followers': [],
-          'following': [],
-          // 'photoUrl': photoUrl,
-        });
-        res = 'success';
-        // await _store
-        //     .collection('users')
-        //     .doc(credential.user!.uid)
-        //     .set(user.toJson());
+        // await _store.collection('users').doc(credential.user!.uid).set({
+        //   'username': username,
+        //   'uid': credential.user!.uid,
+        //   'bio': bio,
+        //   'email': email,
+        //   'followers': [],
+        //   'following': [],
+        //   // 'photoUrl': photoUrl,
+        // });
         // res = 'success';
+        await _store
+            .collection('users')
+            .doc(credential.user!.uid)
+            .set(user.toJson());
+        res = 'success';
       }
     } on FirebaseAuthException catch (error) {
       if (error.code == 'invalid-email') {
