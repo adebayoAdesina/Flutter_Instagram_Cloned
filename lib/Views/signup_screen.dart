@@ -64,12 +64,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
     if (res != 'success') {
       showSnapBar(res, context);
     } else {
-      Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-              builder: (_) => const ResponsiveLayout(
-                  webScreenLayout: WebScreenLayout(),
-                  mobileScreenLayout: MobileScreenLayout())));
+      // Navigator.pushReplacement(
+      //     context,
+      //     MaterialPageRoute(
+      //         builder: (_) => const ResponsiveLayout(
+      //             webScreenLayout: WebScreenLayout(),
+      //             mobileScreenLayout: MobileScreenLayout())));
     }
   }
 
@@ -194,7 +194,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     child: const Text('Already have an account?'),
                     padding: const EdgeInsets.symmetric(vertical: 8)),
                 GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) => const LoginScreen(),),);
+                  },
                   child: Container(
                       child: const Text(
                         'Log in.',

@@ -13,7 +13,8 @@ class AuthMethods {
   Future<model.User> getUserDetails() async {
     User currentUser = _auth.currentUser!;
 
-    DocumentSnapshot snap = await _store.collection('users').doc(currentUser.uid).get();
+    DocumentSnapshot snap =
+        await _store.collection('users').doc(currentUser.uid).get();
 
     return model.User.fromSnap(snap);
   }
@@ -32,11 +33,12 @@ class AuthMethods {
       if (email.isNotEmpty ||
           password.isNotEmpty ||
           username.isNotEmpty ||
-          bio.isNotEmpty) {
+          bio.isNotEmpty || file != null) {
+         
         // register user
         UserCredential credential = await _auth.createUserWithEmailAndPassword(
             email: email, password: password);
-        print(credential.user!.displayName);
+        // print(credential.user!.displayName);
         // to get the user id
         print(credential.user!.uid);
 
@@ -52,8 +54,8 @@ class AuthMethods {
           followers: [],
           following: [],
         );
- 
-        //add user to our database
+
+        // add user to our database
         // await _store.collection('users').doc(credential.user!.uid).set({
         //   'username': username,
         //   'uid': credential.user!.uid,
@@ -61,7 +63,7 @@ class AuthMethods {
         //   'email': email,
         //   'followers': [],
         //   'following': [],
-        //   // 'photoUrl': photoUrl,
+        //   'photoUrl': photoUrl,
         // });
         // res = 'success';
         await _store
@@ -75,6 +77,9 @@ class AuthMethods {
         res = 'The email is badly formatted.';
       } else if (error.code == 'weak-password') {
         res = 'Password should be at least 6 characters';
+      }
+      else {
+        res = error.code;
       }
     } catch (e) {
       res = e.toString();
