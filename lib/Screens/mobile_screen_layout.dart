@@ -1,5 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_instagram_clone/Provider/user_provider.dart';
 import 'package:provider/provider.dart';
@@ -36,7 +35,7 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
   Widget build(BuildContext context) {
     model.User? user = Provider.of<UserProvider>(context).getUser;
     return Scaffold(
-      body: Center(child: Text(user.toString())),
+      body: Center(child: Text(user!.email.toString())),
     );
   }
 }

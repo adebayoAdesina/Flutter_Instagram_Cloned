@@ -9,14 +9,15 @@ class User {
   final List followers;
   final List following;
 
-  User(
-      {required this.username,
-      required this.uid,
-      required this.photoUrl,
-      required this.bio,
-      required this.email,
-      required this.followers,
-      required this.following});
+  User({
+    required this.username,
+    required this.uid,
+    required this.photoUrl,
+    required this.bio,
+    required this.email,
+    required this.followers,
+    required this.following,
+  });
 
   Map<String, dynamic> toJson() => {
         'username': username,

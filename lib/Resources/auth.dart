@@ -2,7 +2,7 @@ import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
+
 import 'package:flutter_instagram_clone/Model/user.dart' as model;
 import 'package:flutter_instagram_clone/Resources/storage_methods.dart';
 
@@ -101,7 +101,10 @@ class AuthMethods {
       }
     } on FirebaseAuthException catch (error) {
       if (error.code == 'user-not-found') {
-      } else if (error.code == 'wrong-password') {}
+        res = ' user not found';
+      } else if (error.code == 'wrong-password') {
+        res = 'wrong password';
+      }
     } catch (e) {
       res = e.toString();
     }

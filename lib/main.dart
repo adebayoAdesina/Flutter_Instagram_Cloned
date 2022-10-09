@@ -4,9 +4,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_instagram_clone/Provider/user_provider.dart';
 import 'package:flutter_instagram_clone/Responsiveness/responsive.dart';
-import 'package:flutter_instagram_clone/Screens/mobileScreenLayout.dart';
-import 'package:flutter_instagram_clone/Screens/webScreenLayout.dart';
-import 'package:flutter_instagram_clone/Views/home_screen.dart';
+import 'package:flutter_instagram_clone/Screens/mobile_screen_layout.dart';
+import 'package:flutter_instagram_clone/Screens/web_screen_layout.dart';
 import 'package:flutter_instagram_clone/Views/login_screen.dart';
 import 'package:provider/provider.dart';
 import 'Utils/colors.dart';
@@ -68,7 +67,6 @@ class MyApp extends StatelessWidget {
             return const LoginScreen();
           },
         ),
-        // home: const LoginScreen()
       ),
     );
   }

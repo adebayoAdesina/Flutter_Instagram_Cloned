@@ -9,8 +9,8 @@ import 'package:flutter_instagram_clone/Widgets/text_field_inputs.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../Responsiveness/responsive.dart';
-import '../Screens/mobileScreenLayout.dart';
-import '../Screens/webScreenLayout.dart';
+import '../Screens/mobile_screen_layout.dart';
+import '../Screens/web_screen_layout.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -39,11 +39,14 @@ class _LoginScreenState extends State<LoginScreen> {
     });
     if (res == 'success') {
       Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-              builder: (_) => const ResponsiveLayout(
-                  webScreenLayout: WebScreenLayout(),
-                  mobileScreenLayout: MobileScreenLayout())));
+        context,
+        MaterialPageRoute(
+          builder: (_) => const ResponsiveLayout(
+            webScreenLayout: WebScreenLayout(),
+            mobileScreenLayout: MobileScreenLayout(),
+          ),
+        ),
+      );
     } else {
       await showSnapBar(res, context);
     }

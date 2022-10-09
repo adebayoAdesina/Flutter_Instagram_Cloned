@@ -3,8 +3,8 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_instagram_clone/Resources/auth.dart';
 import 'package:flutter_instagram_clone/Responsiveness/responsive.dart';
-import 'package:flutter_instagram_clone/Screens/mobileScreenLayout.dart';
-import 'package:flutter_instagram_clone/Screens/webScreenLayout.dart';
+import 'package:flutter_instagram_clone/Screens/mobile_screen_layout.dart';
+import 'package:flutter_instagram_clone/Screens/web_screen_layout.dart';
 import 'package:flutter_instagram_clone/Utils/utils.dart';
 import 'package:flutter_instagram_clone/Views/login_screen.dart';
 import 'package:flutter_svg/svg.dart';
@@ -53,8 +53,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         password: _passwordController.text,
         username: _usernameController.text,
         bio: _bioController.text,
-        file: _image!
-        );
+        file: _image!);
     print(res);
 
     setState(() {
@@ -64,12 +63,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
     if (res != 'success') {
       showSnapBar(res, context);
     } else {
-      // Navigator.pushReplacement(
-      //     context,
-      //     MaterialPageRoute(
-      //         builder: (_) => const ResponsiveLayout(
-      //             webScreenLayout: WebScreenLayout(),
-      //             mobileScreenLayout: MobileScreenLayout())));
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (_) => const ResponsiveLayout(
+            webScreenLayout: WebScreenLayout(),
+            mobileScreenLayout: MobileScreenLayout(),
+          ),
+        ),
+      );
     }
   }
 
@@ -196,9 +198,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 GestureDetector(
                   onTap: () {
                     Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (_) => const LoginScreen(),),);
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const LoginScreen(),
+                      ),
+                    );
                   },
                   child: Container(
                       child: const Text(
