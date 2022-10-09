@@ -1,6 +1,7 @@
-
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_instagram_clone/Provider/user_provider.dart';
+import 'package:flutter_instagram_clone/Utils/colors.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_instagram_clone/Model/user.dart' as model;
 
@@ -12,30 +13,96 @@ class MobileScreenLayout extends StatefulWidget {
 }
 
 class _MobileScreenLayoutState extends State<MobileScreenLayout> {
-  // String username = "";
+  int _page = 0;
+  late PageController pageController;
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   getUsername();
-  // }
+  @override
+  void initState() {
+    pageController = PageController();
+    super.initState();
+  }
 
-  // void getUsername() async {
-  //   DocumentSnapshot snap = await FirebaseFirestore.instance
-  //       .collection('users')
-  //       .doc(FirebaseAuth.instance.currentUser!.uid).get();
-        
+  @override
+  void dispose() {
+    pageController.dispose();
+    super.dispose();
+  }
 
-  //       setState(() {
-  //         username = (snap.data() as Map<String, dynamic>)['username'];
-  //       });
-  // }
+  void navigationTab(int page) {
+    pageController.jumpToPage(page);
+  }
 
+  void onPageChanged (int page) {
+    setState(() {
+      _page = page;
+    });
+  }
   @override
   Widget build(BuildContext context) {
     model.User? user = Provider.of<UserProvider>(context).getUser;
     return Scaffold(
-      body: Center(child: Text(user!.email.toString())),
+      body: PageView(
+        controller: pageController,
+        onPageChanged: onPageChanged,
+        physics: const NeverScrollableScrollPhysics(),
+        children: [
+          Center(
+            child: Text(
+              user!.email.toString(),
+            ),
+          ),
+          Text('hello'),
+          Text('hello1'),
+          Text('hello2'),
+          Text('hello3'),
+        ],
+      ),
+      bottomNavigationBar: CupertinoTabBar(
+        backgroundColor: mobileBackgroundColor,
+        onTap: navigationTab,
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.home,
+              color: _page == 0 ? primaryColor : secondaryColor,
+            ),
+            label: '',
+            backgroundColor: primaryColor,
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.search,
+              color: _page == 1 ? primaryColor : secondaryColor,
+            ),
+            label: '',
+            backgroundColor: primaryColor,
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.add_circle,
+              color: _page == 2 ? primaryColor : secondaryColor,
+            ),
+            label: '',
+            backgroundColor: primaryColor,
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.favorite,
+              color: _page == 3 ? primaryColor : secondaryColor,
+            ),
+            label: '',
+            backgroundColor: primaryColor,
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.person,
+              color: _page == 4 ? primaryColor : secondaryColor,
+            ),
+            label: '',
+            backgroundColor: primaryColor,
+          ),
+        ],
+      ),
     );
   }
 }
