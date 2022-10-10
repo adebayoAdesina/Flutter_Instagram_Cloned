@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_instagram_clone/Model/user.dart';
 import 'package:flutter_instagram_clone/Provider/user_provider.dart';
+import 'package:flutter_instagram_clone/Resources/firestore_method.dart';
 import 'package:flutter_instagram_clone/Utils/colors.dart';
 import 'package:flutter_instagram_clone/Utils/utils.dart';
 import 'package:image_picker/image_picker.dart';
@@ -32,11 +33,20 @@ class _AddPostState extends State<AddPost> {
     super.dispose();
   }
 
-  void postImage ( String uid, String username, String profileImage ) async{
-      try {
-        
-      } catch (e) {
+  void postImage(String uid, String username, String profImage) async {
+    try {
+      String res = await FireStoreMethod().uploadPost(
+        textEditingController.text,
+        _file!,
+        uid,
+        username,
+        profImage,
+      );
+
+      if (res == 'success') {
+        showSnapBar('posted', context);
       }
+    } catch (e) {}
   }
 
   _selectImage(BuildContext context) async {
@@ -82,6 +92,7 @@ class _AddPostState extends State<AddPost> {
   @override
   Widget build(BuildContext context) {
     final User? user = context.watch<UserProvider>().getUser;
+    
     Size size = MediaQuery.of(context).size;
     return _file == null
         ? Center(
@@ -103,7 +114,8 @@ class _AddPostState extends State<AddPost> {
               title: const Text('Post to'),
               actions: [
                 TextButton(
-                  onPressed: postImage,
+                  // onPressed: (){},
+                  onPressed: ()=>postImage(user!.uid, user.username, user.photoUrl),
                   child: const Text(
                     'Post',
                     style: TextStyle(
