@@ -23,7 +23,7 @@ class FireStoreMethod {
         datePublished: DateTime.now(),
         postUrl: postUrl,
         profImage: profImage,
-        likes: null,
+        likes: [],
       );
 
       firebaseFirestore.collection('Posts').doc(postId).set(

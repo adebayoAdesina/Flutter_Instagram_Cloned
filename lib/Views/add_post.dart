@@ -20,7 +20,7 @@ class AddPost extends StatefulWidget {
 class _AddPostState extends State<AddPost> {
   Uint8List? _file;
   late TextEditingController textEditingController;
-
+  bool _isLoading = false;
   @override
   void initState() {
     textEditingController = TextEditingController();
@@ -34,6 +34,9 @@ class _AddPostState extends State<AddPost> {
   }
 
   void postImage(String uid, String username, String profImage) async {
+    setState(() {
+      _isLoading = true;
+    });
     try {
       String res = await FireStoreMethod().uploadPost(
         textEditingController.text,
@@ -44,9 +47,18 @@ class _AddPostState extends State<AddPost> {
       );
 
       if (res == 'success') {
+        setState(() {
+          _isLoading = false;
+        });
+        clearImage();
         showSnapBar('posted', context);
       }
-    } catch (e) {}
+    } catch (e) {
+      setState(() {
+        _isLoading = false;
+      });
+      showSnapBar(e.toString(), context);
+    }
   }
 
   _selectImage(BuildContext context) async {
@@ -89,10 +101,16 @@ class _AddPostState extends State<AddPost> {
     );
   }
 
+  void clearImage () {
+    setState(() {
+      _file = null;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final User? user = context.watch<UserProvider>().getUser;
-    
+
     Size size = MediaQuery.of(context).size;
     return _file == null
         ? Center(
@@ -114,8 +132,8 @@ class _AddPostState extends State<AddPost> {
               title: const Text('Post to'),
               actions: [
                 TextButton(
-                  // onPressed: (){},
-                  onPressed: ()=>postImage(user!.uid, user.username, user.photoUrl),
+                  onPressed: () =>
+                      postImage(user!.uid, user.username, user.photoUrl),
                   child: const Text(
                     'Post',
                     style: TextStyle(
@@ -129,6 +147,14 @@ class _AddPostState extends State<AddPost> {
             ),
             body: Column(
               children: [
+                _isLoading
+                    ? const LinearProgressIndicator()
+                    : const Padding(
+                        padding: EdgeInsets.only(
+                          top: 0,
+                        ),
+                      ),
+                const Divider(),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   crossAxisAlignment: CrossAxisAlignment.start,
