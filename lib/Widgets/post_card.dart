@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_instagram_clone/Resources/firestore_method.dart';
 import 'package:flutter_instagram_clone/Utils/colors.dart';
 import 'package:flutter_instagram_clone/Widgets/like_animation.dart';
 import 'package:provider/provider.dart';
@@ -88,7 +89,12 @@ class _PostCardState extends State<PostCard> {
             ),
           ),
           GestureDetector(
-            onDoubleTap: (() {
+            onDoubleTap: (() async {
+              await FireStoreMethod().likePost(
+                widget.snap['postId'],
+                user!.uid,
+                widget.snap['likes'],
+              );
               setState(() {
                 isLikeAnimating = !isLikeAnimating;
               });
@@ -106,7 +112,7 @@ class _PostCardState extends State<PostCard> {
                 ),
                 AnimatedOpacity(
                   duration: const Duration(milliseconds: 200),
-                  opacity: isLikeAnimating  ?1 :0,
+                  opacity: isLikeAnimating ? 1 : 0,
                   child: LikeAnimation(
                     child: const Icon(
                       Icons.favorite,
@@ -131,11 +137,21 @@ class _PostCardState extends State<PostCard> {
                 isAnimating: widget.snap['likes'].contains(user!.uid),
                 smallLike: true,
                 child: IconButton(
-                  onPressed: () {},
-                  icon: Icon(
-                    Icons.favorite,
-                    color: Colors.red,
-                  ),
+                  onPressed: () async {
+                    await FireStoreMethod().likePost(
+                      widget.snap['postId'],
+                      user.uid,
+                      widget.snap['likes'],
+                    );
+                  },
+                  icon: widget.snap['likes'].contains(user.uid)
+                      ? const Icon(
+                          Icons.favorite,
+                          color: Colors.red,
+                        )
+                      : const Icon(
+                          Icons.favorite_border,
+                        ),
                 ),
               ),
               IconButton(
