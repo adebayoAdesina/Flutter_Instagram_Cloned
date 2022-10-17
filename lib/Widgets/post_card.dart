@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_instagram_clone/Resources/firestore_method.dart';
 import 'package:flutter_instagram_clone/Utils/colors.dart';
+import 'package:flutter_instagram_clone/Views/commit_screen.dart';
 import 'package:flutter_instagram_clone/Widgets/like_animation.dart';
 import 'package:provider/provider.dart';
 
@@ -155,7 +156,14 @@ class _PostCardState extends State<PostCard> {
                 ),
               ),
               IconButton(
-                onPressed: () {},
+                onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => CommentScreen(
+                      snap: widget.snap['postId'].toString(),
+                    ),
+                  ),
+                ),
                 icon: Icon(
                   Icons.comment_outlined,
                 ),

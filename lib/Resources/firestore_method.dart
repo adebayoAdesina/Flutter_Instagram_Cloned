@@ -49,4 +49,25 @@ class FireStoreMethod {
       print(e.toString());
     }
   }
+
+  Future<String> postComment(
+      String postId, String text, String uid, String name, String profilePic,) async {
+    String res = '';
+try {
+  if (text.isNotEmpty) {
+    String commentId = const Uuid().v1();
+    await firebaseFirestore.collection('Posts').doc(postId).collection('Comments').doc(commentId).set({
+      'profilePic' : profilePic,
+      'name' : name,
+      'uis': uid,
+      'text': text,
+      'comments': commentId,
+      'datePublished': DateTime.now(),
+    });
+  }
+} catch (e) {
+  print(e.toString());
+}
+    return res;
+  }
 }
